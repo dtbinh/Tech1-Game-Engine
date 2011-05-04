@@ -1,0 +1,15 @@
+some useful git commands.
+
+git commit FILENAME -m "Descritpion"
+
+git push ---- saving changes  to server
+
+git status
+
+git commit -a -m "description"     ---- commits all changes
+
+git add filename
+
+git reset --hard dfb2beeb282233128b77c47a774608b3920765eb ----wayback
+
+git log
