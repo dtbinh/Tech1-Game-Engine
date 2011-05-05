@@ -1,3 +1,6 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
 
 #include "Parrenting.h"
 #include <windows.h>

@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #ifndef _VECTORS_
 #define _VECTORS_
 

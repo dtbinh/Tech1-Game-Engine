@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #include "Vector.h"
 struct Matrix {
   float m[16];

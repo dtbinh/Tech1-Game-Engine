@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #include "BoneIndexer.h"
 #include <iostream>
 

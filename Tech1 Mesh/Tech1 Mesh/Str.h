@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #ifndef _STR_
 #define _STR_
 int GetStringLengh(char * String);

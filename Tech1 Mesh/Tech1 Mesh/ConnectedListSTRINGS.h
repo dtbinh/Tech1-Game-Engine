@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #ifndef _CONNECTED_LIST_STRINGS_
 #define _CONNECTED_LIST_STRINGS_
 

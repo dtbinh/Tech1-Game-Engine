@@ -1,3 +1,6 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
 
 #include "DynamicBuffer.h"
 #include "Str.h"

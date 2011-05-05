@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #ifndef _STRING_DYNAMIC_BUFFER_
 #define _STRING_DYNAMIC_BUFFER_
 

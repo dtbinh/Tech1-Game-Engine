@@ -1,3 +1,7 @@
+/*
+Copyright (C) 2011 Tech1 Game Engine.
+*/
+
 #include <stdlib.h>
 #include <crtdbg.h>
 #include "Mesh.h"
