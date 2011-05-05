@@ -1,0 +1,5 @@
+Log.txt
+*.ncb
+*.user
+Debug/
+Release/
