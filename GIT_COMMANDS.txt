@@ -15,3 +15,5 @@ some useful git commands.
 'git log'
 
 'git add -A' is shortcut for 'git add -u' + 'git add .'
+
+'git commit --amend' - undo last commit

@@ -3,3 +3,4 @@ Log.txt
 *.user
 Debug/
 Release/
+Thumbs.db
