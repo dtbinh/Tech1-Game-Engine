@@ -1,0 +1,29 @@
+Here is how I was able to setup Visual C++ Express Edition 2008 to compile plugin for Maya.
+
+1.  Download and install VCEE here using their instructions:
+
+http://msdn.microsoft.com/vstudio/express/visualc/download/
+
+2. Find the MayaPluginWizard2.0.zip in your installation folder and extract the files, usually here:
+
+C:\Program Files\Alias\Maya7.0\devkit\pluginwizard
+
+3. Edit the MayaPlugInWizard.vsz file with a text editor.  Change the line that says:
+
+Wizard=VsWizard.VsWizardEngine.7.1
+
+to
+
+Wizard=VsWizard.VsWizardEngine.9.0
+
+4. Place the MayaPlugInWizard .ico and .vsz files into here:
+
+C:\Program Files\Microsoft Visual Studio 9\VC\Express\VCProjects
+
+5. Create a MayaPlugInWizard folder in the same directory and put the vsdir file there.
+
+6. Copy the MayaPlugInWizard folder from the .zip file into here:
+
+ C:\Program Files\Microsoft Visual Studio 9\VC\VCWizards
+
+Ok, you should now be able to run the MayaPluginWizard when you run VCEE and create a New Project.  Cheers!
