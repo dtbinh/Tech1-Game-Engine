@@ -1,0 +1,23 @@
+sampler tex0;
+struct PS_INPUT
+{
+float2 uv0  : TEXCOORD0;
+//float2 uv1  : TEXCOORD1;
+};
+
+struct PS_OUTPUT
+{
+  float4 diffuse : COLOR0;
+};
+
+PS_OUTPUT main (PS_INPUT input)
+{
+  PS_OUTPUT output;
+  float4 texel0  = tex2D(tex0, input.uv0);  // Текстура 1
+
+
+  output.diffuse  =texel0;
+
+
+  return output;
+}

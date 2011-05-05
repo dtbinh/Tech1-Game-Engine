@@ -1,0 +1,14 @@
+float4x4 g_mViewProj;
+float g_fDepthBias;
+void main(
+  float4 vPos : POSITION,
+  out float4 vPosOut : POSITION,
+  out float3 vPixelOut : TEXCOORD0)
+{
+  // pass vertex position through as usual
+  vPosOut = mul(vPos, g_mViewProj);
+  // apply bias
+  vPosOut.z+=g_fDepthBias;
+  // output pixel pos
+  vPixelOut=vPosOut.xyz;
+}

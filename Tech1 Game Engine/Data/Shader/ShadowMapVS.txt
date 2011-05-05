@@ -1,0 +1,19 @@
+float4x4 WorldViewProj;
+
+struct VS_INPUT {
+    float4 Position : POSITION;
+};
+
+struct VS_OUTPUT {
+    float4 Position  : POSITION;
+    float4 TexCoord0 : TEXCOORD0;
+
+};
+
+VS_OUTPUT main(VS_INPUT IN)
+{
+    VS_OUTPUT OUT = (VS_OUTPUT)0;
+    OUT.Position = mul(IN.Position, WorldViewProj);
+    OUT.TexCoord0 = float4(OUT.Position.zzz, OUT.Position.w);
+    return OUT;
+}

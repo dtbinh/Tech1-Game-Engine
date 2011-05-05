@@ -1,0 +1,20 @@
+sampler tex0; // g_samShadowMapHW
+sampler tex1; 
+struct VS_OUTPUT {
+    float4 Position  : POSITION;
+    float4 TexCoord0 : TEXCOORD0;
+    float2 TexCoord1 : TEXCOORD1;
+
+};
+float4 main(VS_OUTPUT IN): COLOR
+{
+float4 texel0;
+float4 texel1;
+
+texel0=tex2Dproj(tex0, IN.TexCoord0);
+
+texel1=tex2D(tex1, IN.TexCoord1);
+
+texel0=(texel0*0.3) +(texel1*0.6);
+  return texel0;
+}

@@ -1,0 +1,6 @@
+
+float4 main(float3 vPixelPos : TEXCOORD0): COLOR
+{
+  // write z coordinate (linearized depth) to texture
+  return vPixelPos.z;
+}

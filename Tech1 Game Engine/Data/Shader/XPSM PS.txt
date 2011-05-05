@@ -1,0 +1,14 @@
+
+struct VS_OUTPUT {
+    float4 Position  : POSITION;
+    float4 TexCoord0 : TEXCOORD0;
+};
+
+
+
+float4 main(VS_OUTPUT IN) : COLOR
+{
+    float depth = IN.TexCoord0.b / IN.TexCoord0.a;
+  //  return float4(depth.xxx, 1.0);
+return float4(1.0f, 1.0f, 1.0f, 1.0);
+}

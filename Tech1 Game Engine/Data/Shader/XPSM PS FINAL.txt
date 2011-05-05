@@ -1,0 +1,46 @@
+float    ZBias;
+sampler tex0; // ShadowMapSampler
+sampler tex1; 
+struct VS_OUTPUT {
+    float4 Position  : POSITION;
+    float4 TexCoord0 : TEXCOORD0;
+    float2 TexCoord1 : TEXCOORD1;
+};
+
+float sample_shadow(float2 tc, float2 shift, float depth_cmp)
+{
+	float  texsize = 1536.0;
+	float  offset = 0.5 / texsize;
+	tc += shift * (1.0 / texsize);
+
+	float2 Texc0  = tc + float2( offset, offset);
+	float2 Texc1  = tc + float2(-offset,-offset);
+	float2 Texc2  = tc + float2(-offset, offset);
+	float2 Texc3  = tc + float2( offset,-offset);
+	float4 depth  = float4(depth_cmp - tex2D(tex0, Texc0).x, 
+                           depth_cmp - tex2D(tex0, Texc1).x,
+                           depth_cmp - tex2D(tex0, Texc2).x, 
+                           depth_cmp - tex2D(tex0, Texc3).x);
+	float4  compare = step(depth, 0.0);
+	float2 	fr 		= frac	(Texc0*texsize);
+	float2 	ifr 	= float2(1.0,1.0) - fr;
+	float4 	fr4 	= float4(ifr.x*ifr.y, ifr.x*fr.y, fr.x*ifr.y,  fr.x*fr.y);
+
+	return  dot(compare, fr4);
+}
+
+float4 main(VS_OUTPUT IN) : COLOR
+{
+	float2 shadowTexCoord = IN.TexCoord0.xy / IN.TexCoord0.w;
+	float  shadowTestDepth = (IN.TexCoord0.z - ZBias) / IN.TexCoord0.w;
+
+	float shadow;
+    shadow  = sample_shadow(shadowTexCoord, float2( 1.0, 1.0), shadowTestDepth);
+	shadow += sample_shadow(shadowTexCoord, float2(-1.0,-1.0), shadowTestDepth);
+	shadow += sample_shadow(shadowTexCoord, float2( 1.0,-1.0), shadowTestDepth);
+//	shadow += sample_shadow(shadowTexCoord, float2(-1.0, 1.0), shadowTestDepth);
+float4 texel0  = tex2D(tex1, IN.TexCoord1);
+	float3 color = ((shadow* 0.25 * 0.4+0.6)*texel0)*0.9 + 0.1;
+
+	return float4(color, 1.0);
+}

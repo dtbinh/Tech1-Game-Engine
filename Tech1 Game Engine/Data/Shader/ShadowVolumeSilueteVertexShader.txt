@@ -1,0 +1,19 @@
+float4x4 mat_mvp;  //Произведение мировой, видовой и проекционной матриц.
+
+
+struct VS_INPUT_STRUCT //Входящие данные
+{
+float4 position: POSITION;
+};
+
+struct VS_OUTPUT_STRUCT //Исходящие данные
+{
+float4 position: POSITION;
+};
+
+VS_OUTPUT_STRUCT main(VS_INPUT_STRUCT In_struct)
+{
+VS_OUTPUT_STRUCT Out_struct;
+Out_struct.position = mul(In_struct.position,mat_mvp);
+return Out_struct;
+}

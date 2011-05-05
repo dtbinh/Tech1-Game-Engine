@@ -1,0 +1,17 @@
+struct PS_INPUT
+{
+
+};
+
+struct PS_OUTPUT
+{
+  float4 diffuse : COLOR0;
+};
+
+PS_OUTPUT main (PS_INPUT input)
+{
+PS_OUTPUT output;
+float4 diffuse_color = (1.0f,1.0f,1.0f,1.0f);
+output.diffuse  = diffuse_color;
+return output;
+}
