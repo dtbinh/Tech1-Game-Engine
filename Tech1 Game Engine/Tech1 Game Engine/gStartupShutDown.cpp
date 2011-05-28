@@ -84,6 +84,8 @@ wObjectPicking = new ObjectPicking;
 
 aGame = new Game;
 
+
+
 return true;
 }
 

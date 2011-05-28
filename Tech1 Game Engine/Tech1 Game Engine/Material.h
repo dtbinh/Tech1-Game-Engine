@@ -31,18 +31,18 @@ public:
 
 	 OneMaterial * LoadMaterial(char * FileName);
 	 void * CompileMaterial(char * FileName, unsigned int FileSize, OneMaterial * LoadingMaterial);
-	 bool ProcessData(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & MaterialCompiledSize,unsigned int & RunOnceCompiledSize );
-	 bool Compile(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & CompiledMaterialSize, unsigned int & RunOnceCompiledSize) ;
-     
+	 bool ProcessData(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & MaterialCompiledSize);
+	 bool Compile(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & CompiledMaterialSize) ;
+     void RunOnce();
 
 int LastTokenStartReadPos;
 int LastTokenSize;
 int LastTokenStart;
 char CurrentLoadingMaterial[255];
 unsigned char * CompiledData;
-unsigned char * RunOnceCompiledData;
+//unsigned char * RunOnceCompiledData;
 unsigned int NumBytesCompiled;
-unsigned int RunOnceNumBytesCompiled;
+//unsigned int RunOnceNumBytesCompiled;
 
 
 // Temporarys

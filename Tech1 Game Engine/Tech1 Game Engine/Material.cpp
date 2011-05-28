@@ -21,6 +21,7 @@ cMaterial::~cMaterial()
 
 OneMaterial * cMaterial::LoadMaterial(char * FileName)
 {
+	OneMaterial * TempMaterial = NULL;
 	unsigned int FileSize =  GetFileSizez(Str("Data\\Materials\\%s.mtl" , FileName));
 	if(FileSize == 0xFFFFFFFF)
 	{	
@@ -28,22 +29,24 @@ OneMaterial * cMaterial::LoadMaterial(char * FileName)
 		return 0;
 	}
 
+		TempMaterial	=	new OneMaterial;
 
+		TempMaterial->MaterialName = new char[strlen(FileName)+1];
+		memcpy(&TempMaterial->MaterialName[0], FileName, strlen(FileName)+1);
+		memcpy(&CurrentLoadingMaterial[0], FileName, strlen(FileName)+1);
+		TempMaterial->CompiledMaterial = CompileMaterial(Str("Data\\Materials\\%s.mtl" , FileName), FileSize, FirstMaterial);
 	//MessageBoxA(0,FileName,"LoadingMaterial", MB_OK);
 	if(LastMaterial == NULL)
-	{
-		FirstMaterial	=	new OneMaterial;
-		LastMaterial	=	FirstMaterial;
-		FirstMaterial->MaterialName = new char[strlen(FileName)+1];
-		memcpy(&FirstMaterial->MaterialName[0], FileName, strlen(FileName)+1);
-		memcpy(&CurrentLoadingMaterial[0], FileName, strlen(FileName)+1);
-		FirstMaterial->CompiledMaterial = CompileMaterial(Str("Data\\Materials\\%s.mtl" , FileName), FileSize, FirstMaterial);
-		return FirstMaterial;
+	{	
+		FirstMaterial	=	TempMaterial;
+		LastMaterial	=	TempMaterial;
+		FirstMaterial->NextMaterial = NULL;
 	}else
 	{
-
+		LastMaterial->NextMaterial = TempMaterial;
+		LastMaterial = TempMaterial;
 	}
-	
+	return TempMaterial;
 }
 
 void * cMaterial::CompileMaterial(char * FileName, unsigned int FileSize, OneMaterial * LoadingMaterial)
@@ -61,21 +64,21 @@ Data = new char[FileSize+1];
 File.ReadFile(Data, FileSize);
 Data[FileSize]=0;
 File.CloseFile();
-Compile(Data, false, LoadingMaterial, CompiledMaterialSize, RunOnceCompiledSize);
+Compile(Data, false, LoadingMaterial, CompiledMaterialSize);
 CompiledData = new unsigned char [CompiledMaterialSize];
 
 LastTokenStart = 0;
 LastTokenStartReadPos = 0;
 LastTokenSize = 0;
-Compile(Data, true, LoadingMaterial,CompiledMaterialSize, RunOnceCompiledSize);
+Compile(Data, true, LoadingMaterial,CompiledMaterialSize);
 return CompiledData;
 }
 
-bool  cMaterial::Compile(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & CompiledMaterialSize, unsigned int & RunOnceCompiledSize) 
+bool  cMaterial::Compile(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & CompiledMaterialSize) 
 {
 
 if(Stage) NumBytesCompiled = 0;
-if(Stage) RunOnceNumBytesCompiled = 0;
+//if(Stage) RunOnceNumBytesCompiled = 0;
 // Stage == false Первый проход - вернет размер откомпилированного файла.  
 // true - второй проход - вернет откомпилированный файл (функцию)
 int type = 0;
@@ -94,7 +97,7 @@ for(;;)
 		
 			if(CmpString(Token, "Material",LastTokenSize))
 			{
-					if(! ProcessData(Data, Stage, LoadingMaterial, CompiledMaterialSize, RunOnceCompiledSize) )
+					if(! ProcessData(Data, Stage, LoadingMaterial, CompiledMaterialSize) )
 						{
 							return false;
 						}
@@ -115,7 +118,7 @@ CompiledData[NumBytesCompiled++] = 0xC3; // ret
 }
 return true;// Возвраша
 }
-bool cMaterial::ProcessData(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & MaterialCompiledSize,unsigned int & RunOnceCompiledSize )
+bool cMaterial::ProcessData(char * Data, bool Stage, OneMaterial * LoadingMaterial, unsigned int & MaterialCompiledSize )
 {
 unsigned int FirstSamplerStateParameter;
 unsigned int SecondSamplerStateParameter;
@@ -253,49 +256,49 @@ if(type == OPEN_BRACKET) // Должен идти OPEN_BRACKET
 
 					if(!Stage)
 					{
-						RunOnceCompiledSize+=28;
+						MaterialCompiledSize+=28;
 					}else
 					{
 
 
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0xB8; // mov eax,
+						CompiledData[NumBytesCompiled++] = 0xB8; // mov eax,
 						TempInteger = (unsigned int)&DWORDTemp;
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 0); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 8); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 16); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 24); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0x50; // push eax
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 0); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 8); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 16); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 24); // адрес
+						CompiledData[NumBytesCompiled++] = 0x50; // push eax
 
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0xB8; // mov eax,
+						CompiledData[NumBytesCompiled++] = 0xB8; // mov eax,
 						TempInteger = SecondSamplerStateParameter;
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 0); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 8); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 16); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 24); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0x50; // push eax
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 0); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 8); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 16); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 24); // адрес
+						CompiledData[NumBytesCompiled++] = 0x50; // push eax
 
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0xB8; // mov eax,
+						CompiledData[NumBytesCompiled++] = 0xB8; // mov eax,
 						TempInteger = FirstSamplerStateParameter;
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 0); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 8); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 16); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 24); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0x50; // push eax
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 0); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 8); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 16); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 24); // адрес
+						CompiledData[NumBytesCompiled++] = 0x50; // push eax
 
 
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0xB8; // mov eax,
+						CompiledData[NumBytesCompiled++] = 0xB8; // mov eax,
 						TempInteger = (unsigned int)&cMaterial::SamplerStateSet;
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 0); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 8); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 16); // адрес
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = (TempInteger >> 24); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 0); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 8); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 16); // адрес
+						CompiledData[NumBytesCompiled++] = (TempInteger >> 24); // адрес
 
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0xFF; // call eax
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0xD0; // call eax
+						CompiledData[NumBytesCompiled++] = 0xFF; // call eax
+						CompiledData[NumBytesCompiled++] = 0xD0; // call eax
 
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0x58; // pop eax
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0x58; // pop eax
-						RunOnceCompiledData[RunOnceNumBytesCompiled++] = 0x58; // pop eax
+						CompiledData[NumBytesCompiled++] = 0x58; // pop eax
+						CompiledData[NumBytesCompiled++] = 0x58; // pop eax
+						CompiledData[NumBytesCompiled++] = 0x58; // pop eax
 
 					}
 					//w3dDevice->g_pd3dDevice->SetSamplerState(Index,FirstSamplerStateParameter,SecondSamplerStateParameter);
@@ -331,3 +334,4 @@ void cMaterial::SamplerStateSet(D3DSAMPLERSTATETYPE Type, unsigned int Value, DW
 {
 	w3dDevice->g_pd3dDevice->SetSamplerState(*TextureIndex, Type, Value);
 }
+

@@ -81,4 +81,6 @@ int ConvertTextToNumberInteger(char * Text, int size, int & LastCurNum); // size
 float ConvertTextToNumberFloat(char * Text, int size);
 char * Str(char * str, ...);
 char * GetStr(char * string, unsigned int size);
+
+typedef void (*tRunScript)();
 #endif

@@ -6,7 +6,8 @@ Copyright (C) 2011 Tech1 Game Engine.
 #include "Scene.h"
 #include "Console.h"
 #include "Mesh.h"
-typedef void (*foo)();
+
+
 extern Console * CON;
 extern cMesh * Mesh;
 extern gPrintInfo * wPrintInfo;
@@ -362,12 +363,12 @@ void Scene::RenderBOX2(Bbox * BoxToRendex, D3DXMATRIX * ProjMatrix, D3DXMATRIX *
 	unsigned int ChIndex;
 	// Если бокс виден
 		// Рендерим его
-				foo call_foo;
+				tRunScript RunScript;
 Material->SetDWORDTemporary(GameShaders->GetTextureIndexForShader(PixelPSSMFinal, 1));
 if(BoxToRendex->Material)
 {
-call_foo= (foo)BoxToRendex->Material->CompiledMaterial ;
-call_foo();
+RunScript= (tRunScript)BoxToRendex->Material->CompiledMaterial ;
+RunScript();
 }
 	//Visibility[BoxToRendex->BBoxIndex] = 1;
 
@@ -421,4 +422,12 @@ return &DynamicLights[0];
 unsigned int Scene::GetRootIndex()
 {
 	return SceneRootIndex;
+}
+
+
+void Scene::RunOnce()
+{
+	tRunScript RunScript;
+	RunScript= (tRunScript)RunOnceMaterial->CompiledMaterial;
+	RunScript();
 }

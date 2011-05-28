@@ -3,7 +3,7 @@ TotalNumChildren	7
 NumMeshes		6
 NumBBox			2
 NumNavMesh		0
-
+RunOnce			Level1RunOnce
 Mesh	{
 			Name		SceneRoot
 			Type		BBOX

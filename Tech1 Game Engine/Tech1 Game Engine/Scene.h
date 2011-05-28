@@ -93,8 +93,10 @@ MeshI* GetMeshes();
 	unsigned int GetRootIndex();
 	void RenderBOX(Bbox * BoxToRendex);
 	void RenderBOX2(Bbox * BoxToRendex, D3DXMATRIX * ProjMatrix, D3DXMATRIX * texturemat, bool RentderToShadowMap);
-	
-
+	void RunOnce();
+	void SetRunOnce(OneMaterial * RunOnceMaterial) { this->RunOnceMaterial = RunOnceMaterial; }
+	private:
+	OneMaterial * RunOnceMaterial;
 };
 
 #endif

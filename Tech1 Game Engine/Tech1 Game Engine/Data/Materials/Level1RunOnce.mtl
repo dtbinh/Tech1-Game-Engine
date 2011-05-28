@@ -1,0 +1,6 @@
+	Material
+	{
+		SetDiffuseSamplerState D3DSAMP_MAGFILTER D3DTEXF_LINEAR
+		SetDiffuseSamplerState D3DSAMP_MINFILTER D3DTEXF_LINEAR
+		 
+	};

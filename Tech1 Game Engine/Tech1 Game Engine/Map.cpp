@@ -136,6 +136,20 @@ for(;;)
 			continue;
 			}
 
+			if(CmpString(Token, "RunOnce",LastTokenSize))
+			{
+				Token = GetNextTokenSkipSpacebar(Data , type, LastTokenSize, LastTokenStartReadPos, LastTokenStart);
+					if(type!=BIG_OR_SMALL_LETERS_AND_NUMBERS)
+					{
+						CON->ErrorMessage("Error loading \"%s\". ParseMapData: Invalid RunOnce FileName", CurrentMapFileName );
+						return false;
+					}
+				
+					Sce->SetRunOnce(Material->LoadMaterial(GetStr(Token, LastTokenSize)));
+					
+					continue;
+			}
+
 			if(CmpString(Token, "Mesh",LastTokenSize))
 			{
 					if(!LoadMesh(Data, NumChildrensLoaded))
